@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nobel mukofoti olimlari | Nobel laureates</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #f5f7fc;
+            --bg-secondary: #ffffff;
+            --text-primary: #1e2a3e;
+            --text-secondary: #2c3e4e;
+            --card-bg: #ffffff;
+            --card-shadow: 0 20px 35px -12px rgba(0,0,0,0.1);
+            --border-color: rgba(207, 175, 55, 0.2);
+            --badge-bg: #1e2a3e;
+            --badge-text: gold;
+            --year-bg: #f5e7c8;
+            --year-text: #a56212;
+            --field-color: #2c7da0;
+            --footer-border: rgba(0,0,0,0.05);
+        }
+
+        body.dark {
+            --bg-primary: #0f1724;
+            --bg-secondary: #1a2332;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --card-bg: #1e293b;
+            --card-shadow: 0 20px 35px -12px rgba(0,0,0,0.4);
+            --border-color: rgba(207, 175, 55, 0.3);
+            --badge-bg: #fbbf24;
+            --badge-text: #1e2a3e;
+            --year-bg: #334155;
+            --year-text: #fbbf24;
+            --field-color: #60a5fa;
+            --footer-border: rgba(255,255,255,0.05);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 2rem 1rem;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 1rem;
+            background: var(--bg-secondary);
+            border-radius: 60px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Ikonka uchun alohida style */
+        .hero h1::before {
+            content: "🏅";
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            color: #bf953f;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .lang-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .lang-btn {
+            background: var(--card-bg);
+            border: 2px solid #bf953f;
+            color: var(--text-primary);
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .lang-btn:hover, .lang-btn.active {
+            background: #bf953f;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: var(--card-bg);
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0.8rem;
+            border-radius: 50%;
+            box-shadow: var(--card-shadow);
+            z-index: 999;
+            transition: 0.2s;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            margin: 0.5rem 0.3rem;
+            font-weight: bold;
+        }
+
+        .scientists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 2rem;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            background: #4a627a;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+            color: var(--text-primary);
+        }
+
+        .prize-year {
+            display: inline-block;
+            background: var(--year-bg);
+            color: var(--year-text);
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .field {
+            font-weight: 600;
+            color: var(--field-color);
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .desc {
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .extra-info {
+            margin-top: 1rem;
+            padding-top: 0.8rem;
+            border-top: 1px dashed var(--border-color);
+            font-size: 0.85rem;
+            color: var(--field-color);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--footer-border);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: pointer;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            max-width: 500px;
+            width: 90%;
+            border-radius: 2rem;
+            overflow: hidden;
+            animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        .modal-info {
+            padding: 1.5rem;
+        }
+        .modal-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        .modal-info p {
+            margin: 0.8rem 0;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+        .modal-info .detail-label {
+            font-weight: bold;
+            color: var(--field-color);
+            display: inline-block;
+            width: 120px;
+        }
+        .modal-close {
+            position: absolute;
+            top: 25px;
+            right: 35px;
+            color: white;
+            font-size: 3rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        @media (max-width: 680px) {
+            .hero h1 { font-size: 1.6rem; }
+            .theme-toggle { width: 50px; height: 50px; font-size: 1.5rem; }
+            .modal-info .detail-label { width: 100px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero">
+        <h1 id="mainTitle">Nobel mukofoti olimlari</h1>
+        <p id="subtitle">Ilm-fan va insoniyat taraqqiyotiga qo‘shgan ulkan hissa</p>
+        <div class="lang-buttons">
+            <button class="lang-btn active" data-lang="uz">🇺🇿 O'zbekcha</button>
+            <button class="lang-btn" data-lang="ru">🇷🇺 Русский</button>
+            <button class="lang-btn" data-lang="en">🇬🇧 English</button>
+        </div>
+        <div>
+            <span class="badge" id="badgeCount">✨ 12 nafar mashhur olim ✨</span>
+            <span class="badge">🔒 Hech qanday xakerlik kodi mavjud EMAS</span>
+            <span class="badge">✅ Barcha rasmlar to‘g‘ri ishlaydi</span>
+            <span class="badge">📋 Kartani bosing to‘liq ma'lumot uchun</span>
+        </div>
+    </div>
+
+    <div class="scientists-grid" id="olimlarGrid"></div>
+    <footer id="footerText">
+        © 2025 | Nobel mukofoti sovrindorlari | Hurmat va ehtirom bilan.<br>
+        Ushbu sayt faqat ta'limiy maqsadda, zararli funksiyalarsiz tayyorlangan.
+    </footer>
+</div>
+
+<!-- Modal - to'liq ma'lumot uchun -->
+<div id="infoModal" class="modal">
+    <span class="modal-close">&times;</span>
+    <div class="modal-content">
+        <img id="modalImg" class="modal-img" src="" alt="">
+        <div class="modal-info">
+            <h3 id="modalName"></h3>
+            <p><span class="detail-label" id="labelBorn">📅 Tug'ilgan:</span> <span id="modalBorn"></span></p>
+            <p><span class="detail-label" id="labelCountry">🌍 Davlati:</span> <span id="modalCountry"></span></p>
+            <p><span class="detail-label" id="labelDiscovery">🔬 Kashfiyoti:</span> <span id="modalDiscovery"></span></p>
+            <p><span class="detail-label" id="labelPrizeYear">🏆 Nobel yili:</span> <span id="modalPrizeYear"></span></p>
+            <p><span class="detail-label" id="labelReason">📖 Nima uchun:</span> <span id="modalReason"></span></p>
+            <p><span class="detail-label" id="labelFact">💡 Qiziqarli fakt:</span> <span id="modalFact"></span></p>
+        </div>
+    </div>
+</div>
+
+<button class="theme-toggle" id="themeToggle">🌙</button>
+
+<script>
+    // ============================================================
+    // 12 TA NOBEL MUKOFOTI OLIMLARI
+    // ============================================================
+    const olimlarData = [
+        { name_uz: "Albert Einstein", name_ru: "Альберт Эйнштейн", name_en: "Albert Einstein",
+          prizeYear: "1921", field_uz: "Fizika", field_ru: "Физика", field_en: "Physics",
+          desc_uz: "Fotoeffekt qonunini kashf etgan va nazariy fizikaga ulkan hissa qo‘shgan.",
+          desc_ru: "Открыл закон фотоэффекта, внёс огромный вклад в теоретическую физику.",
+          desc_en: "Discovered the law of the photoelectric effect, huge contribution to theoretical physics.",
+          extra_uz: "E = mc² formulasi muallifi.", extra_ru: "Автор формулы E = mc².", extra_en: "Author of E = mc².",
+          image: "https://upload.wikimedia.org/wikipedia/commons/3/3e/Einstein_1921_by_F_Schmutzer_-_restoration.jpg",
+          born_uz: "1879-yil 14-mart, Ulm, Germaniya", born_ru: "14 марта 1879, Ульм, Германия", born_en: "March 14, 1879, Ulm, Germany",
+          country_uz: "Germaniya / Shveytsariya / AQSh", country_ru: "Германия / Швейцария / США", country_en: "Germany / Switzerland / USA",
+          discovery_uz: "Fotoeffekt, Maxsus va Umumiy nisbiylik nazariyasi", discovery_ru: "Фотоэффект, Специальная и Общая теория относительности", discovery_en: "Photoelectric effect, Special & General Relativity",
+          reason_uz: "Fotoeffekt qonunini kashf etgani va nazariy fizikaga qo'shgan hissasi uchun", reason_ru: "За открытие закона фотоэффекта и вклад в теоретическую физику", reason_en: "For discovering the photoelectric effect and contributions to theoretical physics",
+          fact_uz: "Nobel mukofotini olganida Shveytsariya fuqarosi edi", fact_ru: "Когда получил Нобелевскую премию, был гражданином Швейцарии", fact_en: "Was a Swiss citizen when he won the Nobel Prize" },
+          
+        { name_uz: "Marie Curie", name_ru: "Мари Кюри", name_en: "Marie Curie",
+          prizeYear: "1903 & 1911", field_uz: "Fizika / Kimyo", field_ru: "Физика / Химия", field_en: "Physics / Chemistry",
+          desc_uz: "Radioaktivlik kashfiyoti, radiy va poloniy elementlarini aniqlagan.",
+          desc_ru: "Открыла радиоактивность, выделила радий и полоний.",
+          desc_en: "Discovered radioactivity, isolated radium and polonium.",
+          extra_uz: "Nobel mukofotini ikki marta olgan ilk olima.", extra_ru: "Первая учёная, дважды лауреат Нобеля.", extra_en: "First scientist to win two Nobel Prizes.",
+          image: "https://upload.wikimedia.org/wikipedia/commons/c/c8/Marie_Curie_c._1920s.jpg",
+          born_uz: "1867-yil 7-noyabr, Varshava, Polsha", born_ru: "7 ноября 1867, Варшава, Польша", born_en: "November 7, 1867, Warsaw, Poland",
+          country_uz: "Polsha / Fransiya", country_ru: "Польша / Франция", country_en: "Poland / France",
+          discovery_uz: "Radioaktivlik, Poloniy va Radiy elementlari", discovery_ru: "Радиоактивность, элементы Полоний и Радий", discovery_en: "Radioactivity, Polonium and Radium elements",
+          reason_uz: "Radioaktivlik sohasidagi kashfiyotlari uchun", reason_ru: "За открытия в области радиоактивности", reason_en: "For discoveries in radioactivity",
+          fact_uz: "Nobel mukofotini ikki xil sohada olgan yagona ayol", fact_ru: "Единственная женщина, получившая Нобелевские премии в двух разных областях", fact_en: "Only woman to win Nobel Prizes in two different sciences" },
+          
+        { name_uz: "Wilhelm Röntgen", name_ru: "Вильгельм Рентген", name_en: "Wilhelm Röntgen",
+          prizeYear: "1901", field_uz: "Fizika", field_ru: "Физика", field_en: "Physics",
+          desc_uz: "X-nurlarini (rentgen nurlari) kashf etgan. Birinchi Nobel sovrindori.",
+          desc_ru: "Открыл X-лучи (рентгеновские лучи). Первый нобелевский лауреат.",
+          desc_en: "Discovered X-rays. First Nobel Prize winner.",
+          extra_uz: "Tibbiy diagnostikada inqilob qilgan.", extra_ru: "Революция в медицинской диагностике.", extra_en: "Revolutionized medical diagnostics.",
+          image: "https://upload.wikimedia.org/wikipedia/commons/b/b0/Wilhelm_R%C3%B6ntgen_by_Nicola_Perscheid_1915b.jpg",
+          born_uz: "1845-yil 27-mart, Lennep, Germaniya", born_ru: "27 марта 1845, Леннеп, Германия", born_en: "March 27, 1845, Lennep, Germany",
+          country_uz: "Germaniya", country_ru: "Германия", country_en: "Germany",
+          discovery_uz: "Rentgen nurlari (X-nurlari)", discovery_ru: "Рентгеновские лучи (X-лучи)", discovery_en: "X-rays",
+          reason_uz: "X-nurlarini kashf etgani uchun", reason_ru: "За открытие X-лучей", reason_en: "For discovering X-rays",
+          fact_uz: "Birinchi Nobel mukofoti sovrindori (1901)", fact_ru: "Первый нобелевский лауреат (1901)", fact_en: "First Nobel Prize winner (1901)" },
+          
+        { name_uz: "Ivan Pavlov", name_ru: "Иван Павлов", name_en: "Ivan Pavlov",
+          prizeYear: "1904", field_uz: "Fiziologiya", field_ru: "Физиология", field_en: "Physiology",
+          desc_uz: "Ovqat hazm qilish va shartli reflekslar nazariyasi.",
+          desc_ru: "Теория пищеварения и условных рефлексов.",
+          desc_en: "Digestive system and conditioned reflexes theory.",
+          extra_uz: "Psixologiyaga katta ta'sir ko'rsatgan.", extra_ru: "Огромное влияние на психологию.", extra_en: "Major influence on psychology.",
+          image: "https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcTT1s-96T-RFaviPA5S-4Xl6VkTRez5YAr42HTPLqeK1xy4WWwrJ3yzbRPrsKg1295vTd7cR52x4rPwut4GiZobB5M7nH7WO4Qlb0Xff2E56E7jiejGXJAGhPy2Mnw_Ikld8mlcrP0Z&s=19",
+          born_uz: "1849-yil 26-sentyabr, Ryazan, Rossiya", born_ru: "26 сентября 1849, Рязань, Россия", born_en: "September 26, 1849, Ryazan, Russia",
+          country_uz: "Rossiya", country_ru: "Россия", country_en: "Russia",
+          discovery_uz: "Shartli reflekslar, ovqat hazm qilish fiziologiyasi", discovery_ru: "Условные рефлексы, физиология пищеварения", discovery_en: "Conditioned reflexes, digestive physiology",
+          reason_uz: "Ovqat hazm qilish fiziologiyasi bo'yicha ishlari uchun", reason_ru: "За работы по физиологии пищеварения", reason_en: "For work on digestive physiology",
+          fact_uz: "Dastlab diniy seminariyada o'qigan, keyin fanga qiziqqan", fact_ru: "Сначала учился в духовной семинарии, затем увлекся наукой", fact_en: "First studied at a theological seminary, then turned to science" },
+          
+        { name_uz: "Niels Bohr", name_ru: "Нильс Бор", name_en: "Niels Bohr",
+          prizeYear: "1922", field_uz: "Fizika", field_ru: "Физика", field_en: "Physics",
+          desc_uz: "Atom tuzilishi va kvant nazariyasiga asos solgan.",
+          desc_ru: "Структура атома и основы квантовой теории.",
+          desc_en: "Atomic structure and foundation of quantum theory.",
+          extra_uz: "Kopengagen talqini muallifi.", extra_ru: "Автор Копенгагенской интерпретации.", extra_en: "Author of Copenhagen interpretation.",
+          image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQg-WwJZcsMYw-bq7d4nz6uW0sWaueCjqSE1QJO7NfW4gfhIoNEO2JsYvqpULfZ2FvFyHKRl_fCnXkI0TYh46QdxfokVAsmcQVlWiDOpA&s=10",
+          born_uz: "1885-yil 7-oktyabr, Kopengagen, Daniya", born_ru: "7 октября 1885, Копенгаген, Дания", born_en: "October 7, 1885, Copenhagen, Denmark",
+          country_uz: "Daniya", country_ru: "Дания", country_en: "Denmark",
+          discovery_uz: "Atom tuzilishi (Bohr modeli), kvant nazariyasi", discovery_ru: "Строение атома (модель Бора), квантовая теория", discovery_en: "Atomic structure (Bohr model), quantum theory",
+          reason_uz: "Atom tuzilishi va nurlanishini tadqiq qilgani uchun", reason_ru: "За исследование строения атома и излучения", reason_en: "For research on atomic structure and radiation",
+          fact_uz: "Futbolni yaxshi ko'rgan, akasi Daniya terma jamoasida o'ynagan", fact_ru: "Любил футбол, его брат играл за сборную Дании", fact_en: "Loved football, his brother played for Denmark's national team" },
+          
+        { name_uz: "Mother Teresa", name_ru: "Мать Тереза", name_en: "Mother Teresa",
+          prizeYear: "1979", field_uz: "Tinchlik", field_ru: "Мир", field_en: "Peace",
+          desc_uz: "Hindistonda kambag'allar va kasallarga yordam bergan.",
+          desc_ru: "Помощь бедным и больным в Индии.",
+          desc_en: "Helped the poor and sick in India.",
+          extra_uz: "Xalqaro mukofotlarning eng ko'p sohibalaridan.", extra_ru: "Обладательница множества международных наград.", extra_en: "Recipient of many international awards.",
+          image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQS_TG-OHLcwUhnoo0_bUyz3pU6pKR33tFnrGeGGD1c0s35cFD588wYkmLOLoZGT_tgKOMg5_cVbTD6gUGNi_DrLlqHoZWBE0HGXzEeiw&s=10",
+          born_uz: "1910-yil 26-avgust, Skopye, Usmonli imperiyasi (hozirgi Shimoliy Makedoniya)", born_ru: "26 августа 1910, Скопье, Османская империя (ныне Северная Македония)", born_en: "August 26, 1910, Skopje, Ottoman Empire (now North Macedonia)",
+          country_uz: "Hindiston (asli alban)", country_ru: "Индия (албанского происхождения)", country_en: "India (originally Albanian)",
+          discovery_uz: "Missionaries of Charity tashkiloti asoschisi", discovery_ru: "Основательница организации Missionaries of Charity", discovery_en: "Founder of Missionaries of Charity",
+          reason_uz: "Qashshoqlik va azob-uqubatlarga qarshi kurashgani uchun", reason_ru: "За борьбу с бедностью и страданиями", reason_en: "For fighting poverty and suffering",
+          fact_uz: "1979-yilda tinchlik bo'yicha Nobel mukofotini olgan", fact_ru: "Получила Нобелевскую премию мира в 1979 году", fact_en: "Won the Nobel Peace Prize in 1979" },
+          
+        { name_uz: "Ernest Rutherford", name_ru: "Эрнест Резерфорд", name_en: "Ernest Rutherford",
+          prizeYear: "1908", field_uz: "Kimyo", field_ru: "Химия", field_en: "Chemistry",
+          desc_uz: "Atom yadrosini kashf etgan, radioaktivlik tadqiqotlari.",
+          desc_ru: "Открыл атомное ядро, исследования радиоактивности.",
+          desc_en: "Discovered the atomic nucleus, radioactivity research.",
+          extra_uz: "Yadro fizikasining otasi.", extra_ru: "Отец ядерной физики.", extra_en: "Father of nuclear physics.",
+          image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkix8JIvwfzLgbL1w0bDSjQMQzW5XWEfHMCX62jV6uudRRgsdKFq-FpxqAhZXZGALbB5B_YcfsmUmKafTVsd2M8Xt2tzjw0J4xBsRq_bE&s=10",
+          born_uz: "1871-yil 30-avgust, Spring Grove, Yangi Zelandiya", born_ru: "30 августа 1871, Спринг-Гроув, Новая Зеландия", born_en: "August 30, 1871, Spring Grove, New Zealand",
+          country_uz: "Yangi Zelandiya / Buyuk Britaniya", country_ru: "Новая Зеландия / Великобритания", country_en: "New Zealand / United Kingdom",
+          discovery_uz: "Atom yadrosi, alfa va beta nurlanishlar", discovery_ru: "Атомное ядро, альфа- и бета-излучения", discovery_en: "Atomic nucleus, alpha and beta radiation",
+          reason_uz: "Elementlarning parchalanishi va radioaktivlik kimyosi bo'yicha tadqiqotlari uchun", reason_ru: "За исследования распада элементов и химии радиоактивных веществ", reason_en: "For investigations into the disintegration of elements and chemistry of radioactive substances",
+          fact_uz: "Yadro fizikasining otasi deb ataladi", fact_ru: "Его называют отцом ядерной физики", fact_en: "Called the father of nuclear physics" },
+          
+        { name_uz: "James Watson & Francis Crick", name_ru: "Джеймс Уотсон и Фрэнсис Крик", name_en: "James Watson & Francis Crick",
+          prizeYear: "1962", field_uz: "Fiziologiya", field_ru: "Физиология", field_en: "Physiology",
+          desc_uz: "DNK qo'sh spiral tuzilishini kashf etgan.",
+          desc_ru: "Открыли структуру двойной спирали ДНК.",
+          desc_en: "Discovered the double helix structure of DNA.",
+          extra_uz: "Genetika va biotexnologiyaga asos solgan.", extra_ru: "Основа генетики и биотехнологии.", extra_en: "Foundation of genetics and biotechnology.",
+          image: "https://www.thetimes.com/imageserver/image/%2Fmethode%2Ftimes%2Fprod%2Fweb%2Fbin%2Fee369722-6450-11e8-aeba-dfc3db1a69eb.jpg?crop=4606%2C3071%2C0%2C769",
+          born_uz: "Watson: 1928 (Chikago), Crick: 1916 (Northampton)", born_ru: "Уотсон: 1928 (Чикаго), Крик: 1916 (Нортгемптон)", born_en: "Watson: 1928 (Chicago), Crick: 1916 (Northampton)",
+          country_uz: "AQSh (Watson) / Buyuk Britaniya (Crick)", country_ru: "США (Уотсон) / Великобритания (Крик)", country_en: "USA (Watson) / UK (Crick)",
+          discovery_uz: "DNKning ikki spiralli tuzilishi", discovery_ru: "Двойная спираль ДНК", discovery_en: "DNA double helix structure",
+          reason_uz: "Nuklein kislotalarning molekulyar tuzilishini kashf etgani uchun", reason_ru: "За открытие молекулярной структуры нуклеиновых кислот", reason_en: "For discovering molecular structure of nucleic acids",
+          fact_uz: "Rosalind Franklinning rentgen suratlari ularning kashfiyotiga yordam bergan", fact_ru: "Рентгеновские снимки Розалинд Франклин помогли их открытию", fact_en: "Rosalind Franklin's X-ray images helped their discovery" },
+          
+        { name_uz: "Alexander Fleming", name_ru: "Александр Флеминг", name_en: "Alexander Fleming",
+          prizeYear: "1945", field_uz: "Fiziologiya", field_ru: "Физиология", field_en: "Physiology",
+          desc_uz: "Penitsillin antibiotigini kashf etgan.",
+          desc_ru: "Открыл антибиотик пенициллин.",
+          desc_en: "Discovered penicillin antibiotic.",
+          extra_uz: "Millionlab hayotlarni saqlab qolgan.", extra_ru: "Спас миллионы жизней.", extra_en: "Saved millions of lives.",
+          image: "https://upload.wikimedia.org/wikipedia/commons/b/bf/Synthetic_Production_of_Penicillin_TR1468.jpg",
+          born_uz: "1881-yil 6-avgust, Darvel, Shotlandiya", born_ru: "6 августа 1881, Дарвел, Шотландия", born_en: "August 6, 1881, Darvel, Scotland",
+          country_uz: "Shotlandiya / Buyuk Britaniya", country_ru: "Шотландия / Великобритания", country_en: "Scotland / United Kingdom",
+          discovery_uz: "Penitsillin (birinchi antibiotik)", discovery_ru: "Пенициллин (первый антибиотик)", discovery_en: "Penicillin (first antibiotic)",
+          reason_uz: "Penitsillinni kashf etgani va uning turli yuqumli kasalliklarda samaradorligi uchun", reason_ru: "За открытие пенициллина и его эффективности при различных инфекционных заболеваниях", reason_en: "For discovery of penicillin and its efficacy in various infectious diseases",
+          fact_uz: "Penitsillinni tasodifan unutilgan petri idishida topgan", fact_ru: "Открыл пенициллин случайно в забытой чашке Петри", fact_en: "Discovered penicillin by accident in a forgotten Petri dish" },
+          
+        { name_uz: "Malala Yousafzai", name_ru: "Малала Юсуфзай", name_en: "Malala Yousafzai",
+          prizeYear: "2014", field_uz: "Tinchlik", field_ru: "Мир", field_en: "Peace",
+          desc_uz: "Qizlarning ta'lim olish huquqi uchun kurash.",
+          desc_ru: "Борьба за право девочек на образование.",
+          desc_en: "Fighting for girls' right to education.",
+          extra_uz: "Eng yosh Nobel laureati (17 yosh).", extra_ru: "Самый молодой нобелевский лауреат (17 лет).", extra_en: "Youngest Nobel laureate (age 17).",
+          image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9BANmy3skUBzBGrhoGcXQJRorpiKZm7ucmHGWstGqlw_1FXRgVCTBz_EM_v-BfkNIeaUQI8VGjmeeu83Jlo8AvUCvX4nNhaJE3OpflaGP&s=10",
+          born_uz: "1997-yil 12-iyul, Mingora, Pokiston", born_ru: "12 июля 1997, Мингора, Пакистан", born_en: "July 12, 1997, Mingora, Pakistan",
+          country_uz: "Pokiston", country_ru: "Пакистан", country_en: "Pakistan",
+          discovery_uz: "Qizlar ta'limi uchun global harakat", discovery_ru: "Глобальное движение за образование девочек", discovery_en: "Global movement for girls' education",
+          reason_uz: "Bolalar va yoshlarning ta'lim olish huquqi uchun kurashgani uchun", reason_ru: "За борьбу за право детей и молодежи на образование", reason_en: "For struggle for children's and young people's right to education",
+          fact_uz: "Nobel mukofotini olgan eng yosh shaxs (17 yosh)", fact_ru: "Самый молодой человек, получивший Нобелевскую премию (17 лет)", fact_en: "Youngest person to win a Nobel Prize (age 17)" },
+          
+        { name_uz: "Bob Dylan", name_ru: "Боб Дилан", name_en: "Bob Dylan",
+          prizeYear: "2016", field_uz: "Adabiyot", field_ru: "Литература", field_en: "Literature",
+          desc_uz: "Amerika qo'shiq an'analarida yangi poetik ifodalar yaratgan.",
+          desc_ru: "Создал новые поэтические выражения в американской песенной традиции.",
+          desc_en: "Created new poetic expressions in American song tradition.",
+          extra_uz: "Musiqachi sifatida Nobel olgan noyob shaxs.", extra_ru: "Уникальный музыкант-лауреат Нобеля.", extra_en: "Unique musician Nobel winner.",
+          image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS37CymaJA7AEHWraFmupY9LkXj1qtOU3qaLXvBYUKns4tWciWgwkkJxHAm0brGwHPn7uZzCz6VaCloL8A3U8CPLR7Cg0lqyPWW4zX3oivwFQ&s=10",
+          born_uz: "1941-yil 24-may, Duluth, Minnesota, AQSh", born_ru: "24 мая 1941, Дулут, Миннесота, США", born_en: "May 24, 1941, Duluth, Minnesota, USA",
+          country_uz: "AQSh", country_ru: "США", country_en: "USA",
+          discovery_uz: "Zamonaviy amerikalik qo'shiq matni poetikasi", discovery_ru: "Поэтика современной американской песенной лирики", discovery_en: "Modern American song lyric poetry",
+          reason_uz: "Amerika qo'shiq an'analarida yangi poetik ifodalar yaratgani uchun", reason_ru: "За создание новых поэтических выражений в американской песенной традиции", reason_en: "For creating new poetic expressions in American song tradition",
+          fact_uz: "Nobel mukofotini olgan birinchi musiqachi", fact_ru: "Первый музыкант, получивший Нобелевскую премию", fact_en: "First musician to win a Nobel Prize" },
+          
+        { name_uz: "Tu Youyou", name_ru: "Ту Юю", name_en: "Tu Youyou",
+          prizeYear: "2015", field_uz: "Fiziologiya", field_ru: "Физиология", field_en: "Physiology",
+          desc_uz: "Bezgakka qarshi artemisinin preparatini topgan.",
+          desc_ru: "Открыла артемизинин против малярии.",
+          desc_en: "Discovered artemisinin against malaria.",
+          extra_uz: "Xitoyda Nobel olgan birinchi ayol olima.", extra_ru: "Первая китайская женщина-нобелевский лауреат.", extra_en: "First Chinese female Nobel laureate in science.",
+          image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcH9-0uY6EKL5US1OXMTyIkqjp3U80wYur9SY4c2AOSToT80xjJM58kUgt7ZgBrtCzu7EdJUSeLwho50KmP3pBNw-s70mbBE7xO__fUxxXEw&s=10",
+          born_uz: "1930-yil 30-dekabr, Ningbo, Xitoy", born_ru: "30 декабря 1930, Нинбо, Китай", born_en: "December 30, 1930, Ningbo, China",
+          country_uz: "Xitoy", country_ru: "Китай", country_en: "China",
+          discovery_uz: "Artemisinin (bezgakka qarshi dori)", discovery_ru: "Артемизинин (противомалярийное лекарство)", discovery_en: "Artemisinin (anti-malaria drug)",
+          reason_uz: "Bezgakka qarshi yangi davo usulini kashf etgani uchun", reason_ru: "За открытие нового метода лечения малярии", reason_en: "For discovering a new therapy against malaria",
+          fact_uz: "Tibbiy ma'lumotga ega emas, ammo farmakologiya bo'yicha ishlagan", fact_ru: "Не имела медицинского образования, но работала в фармакологии", fact_en: "Had no medical degree but worked in pharmacology" }
+    ];
+
+    let currentLang = "uz";
+
+    const translations = {
+        uz: { 
+            title: "Nobel mukofoti olimlari", 
+            subtitle: "Ilm-fan va insoniyat taraqqiyotiga qo‘shgan ulkan hissa", 
+            badge: "✨ 12 nafar mashhur olim ✨", 
+            footer: "© 2025 | Nobel mukofoti sovrindorlari | Hurmat va ehtirom bilan.\nUshbu sayt faqat ta'limiy maqsadda, zararli funksiyalarsiz tayyorlangan.",
+            labelBorn: "📅 Tug'ilgan:",
+            labelCountry: "🌍 Davlati:",
+            labelDiscovery: "🔬 Kashfiyoti:",
+            labelPrizeYear: "🏆 Nobel yili:",
+            labelReason: "📖 Nima uchun:",
+            labelFact: "💡 Qiziqarli fakt:"
+        },
+        ru: { 
+            title: "Нобелевские лауреаты", 
+            subtitle: "Огромный вклад в науку и человечество", 
+            badge: "✨ 12 известных учёных ✨", 
+            footer: "© 2025 | Лауреаты Нобелевской премии | С уважением.\nСайт создан только в образовательных целях, без вредоносного кода.",
+            labelBorn: "📅 Родился:",
+            labelCountry: "🌍 Страна:",
+            labelDiscovery: "🔬 Открытие:",
+            labelPrizeYear: "🏆 Год Нобеля:",
+            labelReason: "📖 За что:",
+            labelFact: "💡 Интересный факт:"
+        },
+        en: { 
+            title: "Nobel Prize Laureates", 
+            subtitle: "Giant contributions to science and humanity", 
+            badge: "✨ 12 famous scientists ✨", 
+            footer: "© 2025 | Nobel Prize Winners | With respect.\nThis site is for educational purposes only, no malicious code.",
+            labelBorn: "📅 Born:",
+            labelCountry: "🌍 Country:",
+            labelDiscovery: "🔬 Discovery:",
+            labelPrizeYear: "🏆 Nobel Year:",
+            labelReason: "📖 Reason:",
+            labelFact: "💡 Interesting fact:"
+        }
+    };
+
+    function updateUI() {
+        // Sarlavha matnini o'rnatish (ikonka CSS pseudo-element orqali qo'shiladi)
+        document.getElementById("mainTitle").innerText = translations[currentLang].title;
+        document.getElementById("subtitle").innerText = translations[currentLang].subtitle;
+        document.getElementById("badgeCount").innerText = translations[currentLang].badge;
+        document.getElementById("footerText").innerHTML = translations[currentLang].footer.replace(/\n/g, "<br>");
+        
+        document.getElementById("labelBorn").innerHTML = translations[currentLang].labelBorn;
+        document.getElementById("labelCountry").innerHTML = translations[currentLang].labelCountry;
+        document.getElementById("labelDiscovery").innerHTML = translations[currentLang].labelDiscovery;
+        document.getElementById("labelPrizeYear").innerHTML = translations[currentLang].labelPrizeYear;
+        document.getElementById("labelReason").innerHTML = translations[currentLang].labelReason;
+        document.getElementById("labelFact").innerHTML = translations[currentLang].labelFact;
+        
+        renderCards();
+    }
+
+    function openModal(olim) {
+        const modal = document.getElementById("infoModal");
+        document.getElementById("modalImg").src = olim.image;
+        document.getElementById("modalName").innerText = olim[`name_${currentLang}`];
+        document.getElementById("modalBorn").innerText = olim[`born_${currentLang}`];
+        document.getElementById("modalCountry").innerText = olim[`country_${currentLang}`];
+        document.getElementById("modalDiscovery").innerText = olim[`discovery_${currentLang}`];
+        document.getElementById("modalPrizeYear").innerText = olim.prizeYear;
+        document.getElementById("modalReason").innerText = olim[`reason_${currentLang}`];
+        document.getElementById("modalFact").innerText = olim[`fact_${currentLang}`];
+        modal.style.display = "flex";
+    }
+
+    function renderCards() {
+        const grid = document.getElementById("olimlarGrid");
+        grid.innerHTML = "";
+        olimlarData.forEach(olim => {
+            const name = olim[`name_${currentLang}`];
+            const field = olim[`field_${currentLang}`];
+            const desc = olim[`desc_${currentLang}`];
+            const extra = olim[`extra_${currentLang}`];
+            const card = document.createElement("div");
+            card.className = "card";
+            const img = document.createElement("img");
+            img.className = "card-img";
+            img.src = olim.image;
+            img.alt = name;
+            img.onerror = function() { 
+                this.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/No_image_3x4.svg/1024px-No_image_3x4.svg.png";
+            };
+            const content = document.createElement("div");
+            content.className = "card-content";
+            content.innerHTML = `
+                <h3>${name}</h3>
+                <span class="prize-year">🎉 ${olim.prizeYear}</span>
+                <div class="field">🔬 ${field}</div>
+                <p class="desc">${desc}</p>
+                <div class="extra-info">💡 ${extra}</div>
+            `;
+            card.appendChild(img);
+            card.appendChild(content);
+            card.addEventListener("click", () => openModal(olim));
+            grid.appendChild(card);
+        });
+    }
+
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            document.querySelectorAll(".lang-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            currentLang = btn.getAttribute("data-lang");
+            updateUI();
+        });
+    });
+
+    const themeToggle = document.getElementById("themeToggle");
+    themeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        const isDark = document.body.classList.contains("dark");
+        themeToggle.innerHTML = isDark ? "☀️" : "🌙";
+    });
+
+    const modal = document.getElementById("infoModal");
+    document.querySelector(".modal-close").addEventListener("click", () => modal.style.display = "none");
+    modal.addEventListener("click", (e) => { if(e.target === modal) modal.style.display = "none"; });
+
+    updateUI();
+</script>
+</body>
+</html>
